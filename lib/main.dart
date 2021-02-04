@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return casesList.length > 0
                 ? new CasesList(cases: casesList)
                 : new Center(
-                    child: new Text('데이터 파일없음! 하단의 + 버튼을 눌러 파일추가',
+                    child: new Text('데이터 파일없음!!!! \n 하단의 + 버튼을 눌러 파일추가',
                         style: Theme.of(context).textTheme.title));
           },
         )),
