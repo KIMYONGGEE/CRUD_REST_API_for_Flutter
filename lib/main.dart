@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:crud_rest_api_eict/adddatawidget.dart';
+import 'dart:async';
+import 'package:crud_rest_api_eict/models/cases.dart';
+import 'package:crud_rest_api_eict/services/api_service.dart';
+import 'package:crud_rest_api_eict/caseslist.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +31,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: '데이터 파일 CRUD Test '),
     );
   }
 }
@@ -50,21 +55,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final ApiService api = ApiService();
+  List<Cases> casesList;
 
   @override
   Widget build(BuildContext context) {
+    if (casesList == null) {
+      casesList = List<Cases>();
+    }
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -77,41 +75,43 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: new Container(
+        child: new Center(
+            child: new FutureBuilder(
+          future: loadList(),
+          builder: (context, snapshot) {
+            return casesList.length > 0
+                ? new CasesList(cases: casesList)
+                : new Center(
+                    child: new Text('데이터 파일없음! 하단의 + 버튼을 눌러 파일추가',
+                        style: Theme.of(context).textTheme.title));
+          },
+        )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          _navigateToAddScreen(context);
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Future loadList() {
+    Future<List<Cases>> futureCases = api.getCases();
+    futureCases.then((casesList) {
+      setState(() {
+        this.casesList = casesList;
+      });
+    });
+    return futureCases;
+  }
+
+  _navigateToAddScreen(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddDataWidget()),
     );
   }
 }
