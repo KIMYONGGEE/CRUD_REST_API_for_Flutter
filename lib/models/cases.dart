@@ -10,6 +10,8 @@ class Cases {
   final String country;
   final String status;
   final String updated;
+  final String filePath;
+  final String videoType;
 
   Cases(
       {this.id,
@@ -20,7 +22,9 @@ class Cases {
       this.city,
       this.country,
       this.status,
-      this.updated});
+      this.updated,
+      this.filePath,
+      this.videoType});
 
   factory Cases.fromJson(Map<String, dynamic> json) {
     return Cases(
@@ -33,6 +37,8 @@ class Cases {
       country: json['country'] as String,
       status: json['status'] as String,
       updated: json['updated'] as String,
+      filePath: json['filePath'] as String,
+      videoType: json['videoType'] as String,
     );
   }
 
