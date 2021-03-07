@@ -1,4 +1,4 @@
-//모든 CRUD(POST, GET, PUT, DELETE) 방법을 REST API에 적용. REST API에 대한 HTTP 요청의 이 CRUD 작업으로 클래스를 채웁니다.
+//모든 CRUD(POST, GET, PUT, DELETE) 방법을 REST API에 적용. REST API에 대한 HTTP 요청이 CRUD 작업으로 클래스를 채웁니다.
 
 import 'dart:convert';
 
