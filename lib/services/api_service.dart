@@ -64,7 +64,9 @@ class ApiService {
       'address': cases.address,
       'city': cases.city,
       'country': cases.country,
-      'status': cases.status
+      'status': cases.status,
+      'filePath': cases.filePath,
+      'videoType': cases.videoType
     };
 
     final Response response = await put(
